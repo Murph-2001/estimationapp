@@ -1,5 +1,5 @@
 import { useMemo } from 'react'
-import { CATEGORIES, REPS_THRESHOLD, RENTAL_THRESHOLD } from '../constants'
+import { CATEGORIES, USERS, REPS_THRESHOLD, RENTAL_THRESHOLD } from '../constants'
 import ProgressBar from './ProgressBar'
 
 const MATERIAL_IDS = new Set(
@@ -41,7 +41,7 @@ function UserCard({ name, entries, isCurrentUser }) {
           value={totalHours}
           max={REPS_THRESHOLD}
           label="Total REPS Hours"
-          sublabel="Requirement: 750+ hours in real estate"
+          sublabel="Requirement: 500+ hours in real estate"
           color="#6366f1"
         />
         <ProgressBar
@@ -97,7 +97,8 @@ function UserCard({ name, entries, isCurrentUser }) {
 
 export default function Dashboard({ entries, year, currentUser }) {
   const byUser = useMemo(() => {
-    const map = { Patrick: [], Samantha: [] }
+    const map = {}
+    USERS.forEach(u => { map[u.name] = [] })
     entries.forEach(e => {
       if (map[e.user_name]) map[e.user_name].push(e)
     })
@@ -108,19 +109,17 @@ export default function Dashboard({ entries, year, currentUser }) {
     <div className="dashboard">
       <div className="dashboard-heading">
         <h2>{year} REPS Progress</h2>
-        <p>IRS Real Estate Professional Status — 750 total hours &amp; 500 rental hours required per person</p>
+        <p>IRS Real Estate Professional Status — 500 total hours &amp; 500 rental hours required per person</p>
       </div>
       <div className="user-cards">
-        <UserCard
-          name="Patrick"
-          entries={byUser.Patrick}
-          isCurrentUser={currentUser === 'Patrick'}
-        />
-        <UserCard
-          name="Samantha"
-          entries={byUser.Samantha}
-          isCurrentUser={currentUser === 'Samantha'}
-        />
+        {USERS.map(u => (
+          <UserCard
+            key={u.name}
+            name={u.name}
+            entries={byUser[u.name] || []}
+            isCurrentUser={currentUser === u.name}
+          />
+        ))}
       </div>
     </div>
   )
