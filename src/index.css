@@ -503,6 +503,56 @@ body {
 .template-actions { display: flex; align-items: center; gap: .4rem; flex-shrink: 0; }
 .template-desc    { font-size: .875rem; color: var(--text-muted); margin-bottom: .85rem; line-height: 1.4; }
 
+/* ── User checkbox grid (template attendees) ──────────────── */
+.user-checkbox-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .5rem;
+  margin-top: .25rem;
+}
+
+.user-checkbox {
+  display: flex;
+  align-items: center;
+  gap: .4rem;
+  padding: .35rem .75rem;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  font-size: .875rem;
+  cursor: pointer;
+  transition: background .15s, border-color .15s;
+  user-select: none;
+}
+.user-checkbox input { display: none; }
+.user-checkbox:hover  { background: var(--bg); }
+.user-checkbox.checked {
+  background: #eff6ff;
+  border-color: var(--primary);
+  color: var(--primary);
+  font-weight: 600;
+}
+
+/* ── Quick-log panel ──────────────────────────────────────── */
+.template-card-active { border-left-color: var(--primary); background: #fafbff; }
+
+.quick-log-panel {
+  border-top: 1px solid var(--border);
+  margin-top: .85rem;
+  padding-top: .85rem;
+}
+.quick-log-title {
+  font-size: .85rem;
+  font-weight: 700;
+  color: var(--primary);
+  margin-bottom: .75rem;
+}
+.quick-log-actions {
+  display: flex;
+  align-items: center;
+  gap: .75rem;
+  margin-top: .5rem;
+}
+
 .btn-use-template {
   background: #eff6ff;
   color: var(--primary);
