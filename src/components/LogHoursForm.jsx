@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { supabase } from '../supabaseClient'
 import { CATEGORIES, USERS } from '../constants'
 
@@ -13,8 +13,20 @@ export default function LogHoursForm({ currentUser, year, onSaved }) {
     property:    '',
     description: '',
   })
-  const [saving, setSaving] = useState(false)
-  const [error, setError]   = useState('')
+  const [saving, setSaving]       = useState(false)
+  const [error, setError]         = useState('')
+  const [properties, setProperties] = useState([])
+
+  useEffect(() => {
+    supabase
+      .from('entries')
+      .select('property')
+      .not('property', 'is', null)
+      .then(({ data }) => {
+        const unique = [...new Set((data || []).map(e => e.property).filter(Boolean))].sort()
+        setProperties(unique)
+      })
+  }, [])
 
   const set = (field, value) => setForm(f => ({ ...f, [field]: value }))
 
@@ -111,10 +123,15 @@ export default function LogHoursForm({ currentUser, year, onSaved }) {
             <label>Property <span className="field-optional">(optional)</span></label>
             <input
               type="text"
+              list="property-list"
               value={form.property}
               onChange={e => set('property', e.target.value)}
-              placeholder="e.g. 123 Main St, Oak Ave rental"
+              placeholder="e.g. 123 Main St"
+              autoComplete="off"
             />
+            <datalist id="property-list">
+              {properties.map(p => <option key={p} value={p} />)}
+            </datalist>
           </div>
 
           <div className="form-group">
