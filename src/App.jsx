@@ -141,7 +141,7 @@ export default function App() {
           />
         )}
         {tab === 'history' && (
-          <History entries={entries} onRefresh={fetchEntries} currentUser={user} onLogAgain={handleLogAgain} />
+          <History entries={entries} onRefresh={fetchEntries} currentUser={user} onLogAgain={handleLogAgain} year={year} />
         )}
       </main>
     </div>
