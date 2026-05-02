@@ -7,6 +7,7 @@ export const CATEGORIES = [
   { id: 'construction', label: 'Construction & Development', countsForMaterial: false },
   { id: 'management',   label: 'Property Management',        countsForMaterial: true },
   { id: 'admin',        label: 'Administrative',             countsForMaterial: true },
+  { id: 'misc',         label: 'Miscellaneous',              countsForMaterial: true },
 ]
 
 export const USERS = [
@@ -17,4 +18,4 @@ export const USERS = [
 ]
 
 export const REPS_THRESHOLD   = 500
-export const RENTAL_THRESHOLD = 500
+export const RENTAL_THRESHOLD = 750
