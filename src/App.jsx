@@ -4,13 +4,25 @@ import Login from './components/Login'
 import Dashboard from './components/Dashboard'
 import LogHoursForm from './components/LogHoursForm'
 import History from './components/History'
+import Templates from './components/Templates'
+
+const TEMPLATES_KEY = 'reps_templates'
+
+const loadTemplates = () => {
+  try { return JSON.parse(localStorage.getItem(TEMPLATES_KEY) || '[]') }
+  catch { return [] }
+}
+
+const saveTemplates = (list) => localStorage.setItem(TEMPLATES_KEY, JSON.stringify(list))
 
 export default function App() {
-  const [user, setUser] = useState(() => localStorage.getItem('reps_user') || null)
-  const [tab, setTab] = useState('dashboard')
+  const [user, setUser]       = useState(() => localStorage.getItem('reps_user') || null)
+  const [tab, setTab]         = useState('dashboard')
   const [entries, setEntries] = useState([])
   const [loading, setLoading] = useState(false)
-  const [year, setYear] = useState(new Date().getFullYear())
+  const [year, setYear]       = useState(new Date().getFullYear())
+  const [prefill, setPrefill] = useState(null)
+  const [templates, setTemplates] = useState(loadTemplates)
 
   const fetchEntries = useCallback(async () => {
     setLoading(true)
@@ -27,7 +39,6 @@ export default function App() {
     if (user) fetchEntries()
   }, [user, fetchEntries])
 
-  // Real-time subscription
   useEffect(() => {
     if (!user) return
     const channel = supabase
@@ -49,6 +60,38 @@ export default function App() {
     setUser(null)
     setEntries([])
     setTab('dashboard')
+  }
+
+  const handleLogAgain = (entry) => {
+    setPrefill({
+      user_name:   entry.user_name,
+      category:    entry.category,
+      property:    entry.property || '',
+      description: entry.description,
+    })
+    setTab('log')
+  }
+
+  const handleUseTemplate = (tpl) => {
+    setPrefill({
+      user_name:   tpl.user_name,
+      category:    tpl.category,
+      property:    tpl.property || '',
+      description: tpl.description,
+    })
+    setTab('log')
+  }
+
+  const handleSaveTemplate = (tpl) => {
+    const updated = [...templates, { ...tpl, id: Date.now() }]
+    setTemplates(updated)
+    saveTemplates(updated)
+  }
+
+  const handleDeleteTemplate = (id) => {
+    const updated = templates.filter(t => t.id !== id)
+    setTemplates(updated)
+    saveTemplates(updated)
   }
 
   if (!user) return <Login onLogin={handleLogin} />
@@ -76,18 +119,10 @@ export default function App() {
           </div>
         </div>
         <nav className="tabs">
-          <button
-            className={tab === 'dashboard' ? 'tab active' : 'tab'}
-            onClick={() => setTab('dashboard')}
-          >Dashboard</button>
-          <button
-            className={tab === 'log' ? 'tab active' : 'tab'}
-            onClick={() => setTab('log')}
-          >Log Hours</button>
-          <button
-            className={tab === 'history' ? 'tab active' : 'tab'}
-            onClick={() => setTab('history')}
-          >History</button>
+          <button className={tab === 'dashboard' ? 'tab active' : 'tab'} onClick={() => setTab('dashboard')}>Dashboard</button>
+          <button className={tab === 'log'       ? 'tab active' : 'tab'} onClick={() => { setPrefill(null); setTab('log') }}>Log Hours</button>
+          <button className={tab === 'templates' ? 'tab active' : 'tab'} onClick={() => setTab('templates')}>Templates</button>
+          <button className={tab === 'history'   ? 'tab active' : 'tab'} onClick={() => setTab('history')}>History</button>
         </nav>
       </header>
 
@@ -98,13 +133,24 @@ export default function App() {
         )}
         {tab === 'log' && (
           <LogHoursForm
+            key={prefill ? JSON.stringify(prefill) : 'empty'}
             currentUser={user}
             year={year}
-            onSaved={() => { fetchEntries(); setTab('dashboard') }}
+            prefill={prefill}
+            onSaved={() => { setPrefill(null); fetchEntries(); setTab('dashboard') }}
+          />
+        )}
+        {tab === 'templates' && (
+          <Templates
+            templates={templates}
+            currentUser={user}
+            onUse={handleUseTemplate}
+            onSave={handleSaveTemplate}
+            onDelete={handleDeleteTemplate}
           />
         )}
         {tab === 'history' && (
-          <History entries={entries} onRefresh={fetchEntries} currentUser={user} />
+          <History entries={entries} onRefresh={fetchEntries} currentUser={user} onLogAgain={handleLogAgain} />
         )}
       </main>
     </div>
