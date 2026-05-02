@@ -17,5 +17,5 @@ export const USERS = [
   { name: 'Jennifer', password: 'Maxi25'      },
 ]
 
-export const REPS_THRESHOLD   = 500
-export const RENTAL_THRESHOLD = 750
+export const REPS_THRESHOLD   = 750
+export const RENTAL_THRESHOLD = 500

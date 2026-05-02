@@ -41,14 +41,14 @@ function UserCard({ name, entries, isCurrentUser }) {
           value={totalHours}
           max={REPS_THRESHOLD}
           label="Total REPS Hours"
-          sublabel="Requirement: 500+ hours in real estate"
+          sublabel="Requirement: 750+ hours in real estate"
           color="#6366f1"
         />
         <ProgressBar
           value={rentalHours}
           max={RENTAL_THRESHOLD}
           label="Rental Material Participation Hours"
-          sublabel="Requirement: 500+ hours in rental activities"
+          sublabel="Requirement: 500+ hours in rental activities (counts toward 750)"
           color="#f59e0b"
         />
       </div>
@@ -109,7 +109,7 @@ export default function Dashboard({ entries, year, currentUser }) {
     <div className="dashboard">
       <div className="dashboard-heading">
         <h2>{year} REPS Progress</h2>
-        <p>IRS Real Estate Professional Status — 500 total hours &amp; 500 rental hours required per person</p>
+        <p>IRS Real Estate Professional Status — 750 total hours &amp; 500 rental hours in rental activities (rental hours count toward the 750)</p>
       </div>
       <div className="user-cards">
         {USERS.map(u => (
