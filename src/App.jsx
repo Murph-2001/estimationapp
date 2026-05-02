@@ -72,16 +72,6 @@ export default function App() {
     setTab('log')
   }
 
-  const handleUseTemplate = (tpl) => {
-    setPrefill({
-      user_name:   tpl.user_name,
-      category:    tpl.category,
-      property:    tpl.property || '',
-      description: tpl.description,
-    })
-    setTab('log')
-  }
-
   const handleSaveTemplate = (tpl) => {
     const updated = [...templates, { ...tpl, id: Date.now() }]
     setTemplates(updated)
@@ -144,9 +134,10 @@ export default function App() {
           <Templates
             templates={templates}
             currentUser={user}
-            onUse={handleUseTemplate}
+            year={year}
             onSave={handleSaveTemplate}
             onDelete={handleDeleteTemplate}
+            onSaved={() => { fetchEntries(); setTab('dashboard') }}
           />
         )}
         {tab === 'history' && (
