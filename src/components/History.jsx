@@ -1,6 +1,7 @@
 import { useState, useMemo, useEffect } from 'react'
 import { supabase } from '../supabaseClient'
 import { CATEGORIES, USERS } from '../constants'
+import { normalizeProperty, dedupeProperties } from '../propertyUtils'
 
 const CAT_LABEL    = Object.fromEntries(CATEGORIES.map(c => [c.id, c.label]))
 const CAT_MATERIAL = Object.fromEntries(CATEGORIES.map(c => [c.id, c.countsForMaterial]))
@@ -24,7 +25,7 @@ export default function History({ entries, onRefresh, currentUser }) {
       .select('property')
       .not('property', 'is', null)
       .then(({ data }) => {
-        const unique = [...new Set((data || []).map(e => e.property).filter(Boolean))].sort()
+        const unique = dedupeProperties((data || []).map(e => e.property))
         setProperties(unique)
       })
   }, [entries])
@@ -74,7 +75,7 @@ export default function History({ entries, onRefresh, currentUser }) {
       date:        editForm.date,
       category:    editForm.category,
       hours:       hrs,
-      property:    editForm.property || null,
+      property:    editForm.property ? normalizeProperty(editForm.property) : null,
       description: editForm.description,
     }).eq('id', id)
     setSaving(false)

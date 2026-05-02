@@ -109,7 +109,7 @@ export default function Dashboard({ entries, year, currentUser }) {
     <div className="dashboard">
       <div className="dashboard-heading">
         <h2>{year} REPS Progress</h2>
-        <p>IRS Real Estate Professional Status — 500 total hours &amp; 500 rental hours required per person</p>
+        <p>IRS Real Estate Professional Status — 750 total hours &amp; 500 rental hours in rental activities (rental hours count toward the 750)</p>
       </div>
       <div className="user-cards">
         {USERS.map(u => (

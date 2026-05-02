@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { supabase } from '../supabaseClient'
 import { CATEGORIES, USERS } from '../constants'
+import { normalizeProperty, dedupeProperties } from '../propertyUtils'
 
 const today = () => new Date().toISOString().split('T')[0]
 
@@ -23,7 +24,7 @@ export default function LogHoursForm({ currentUser, year, onSaved }) {
       .select('property')
       .not('property', 'is', null)
       .then(({ data }) => {
-        const unique = [...new Set((data || []).map(e => e.property).filter(Boolean))].sort()
+        const unique = dedupeProperties((data || []).map(e => e.property))
         setProperties(unique)
       })
   }, [])
@@ -44,7 +45,7 @@ export default function LogHoursForm({ currentUser, year, onSaved }) {
       date:        form.date,
       category:    form.category,
       hours:       hrs,
-      property:    form.property || null,
+      property:    form.property ? normalizeProperty(form.property) : null,
       description: form.description,
       year,
     }])
