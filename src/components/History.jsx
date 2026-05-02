@@ -8,7 +8,7 @@ const CAT_MATERIAL = Object.fromEntries(CATEGORIES.map(c => [c.id, c.countsForMa
 
 const BLANK_EDIT = { date: '', category: '', hours: '', property: '', description: '' }
 
-export default function History({ entries, onRefresh, currentUser }) {
+export default function History({ entries, onRefresh, currentUser, onLogAgain }) {
   const [filterUser, setFilterUser] = useState('All')
   const [filterCat,  setFilterCat]  = useState('All')
   const [deletingId, setDeletingId] = useState(null)
@@ -194,6 +194,7 @@ export default function History({ entries, onRefresh, currentUser }) {
                         </>
                       ) : (
                         <>
+                          <button className="btn-ghost-sm" onClick={() => onLogAgain(entry)} title="Log again with same details">↺ Again</button>
                           <button className="btn-ghost-sm" onClick={() => startEdit(entry)}>Edit</button>
                           <button
                             className="btn-ghost-sm"

@@ -437,6 +437,85 @@ body {
 
 .no-entries-msg { color: var(--text-light); font-size: .9rem; padding: 1rem 0; }
 
+/* ── Prefill notice ───────────────────────────────────────── */
+.prefill-notice {
+  background: #eff6ff;
+  border: 1px solid #bfdbfe;
+  color: #1e40af;
+  border-radius: 8px;
+  padding: .5rem .75rem;
+  font-size: .85rem;
+  margin-bottom: 1rem;
+}
+
+/* ── Templates ────────────────────────────────────────────── */
+.templates-page {}
+.templates-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 1.5rem;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+.templates-header h2   { font-size: 1.2rem; font-weight: 700; }
+.templates-subtitle    { color: var(--text-muted); font-size: .875rem; margin-top: .2rem; }
+
+.template-form-card {
+  background: var(--surface);
+  border-radius: var(--radius);
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+  box-shadow: var(--shadow-md);
+  border: 2px solid #bfdbfe;
+}
+.template-form-card h3 { font-size: 1rem; font-weight: 700; margin-bottom: 1rem; }
+
+.templates-empty {
+  background: var(--surface);
+  border-radius: var(--radius);
+  padding: 2.5rem;
+  text-align: center;
+  color: var(--text-muted);
+  box-shadow: var(--shadow);
+}
+.templates-empty p + p { margin-top: .5rem; font-size: .875rem; }
+
+.template-list  { display: flex; flex-direction: column; gap: .75rem; }
+
+.template-card {
+  background: var(--surface);
+  border-radius: var(--radius);
+  padding: 1.1rem 1.25rem;
+  box-shadow: var(--shadow);
+  border-left: 4px solid var(--primary);
+}
+.template-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: .4rem;
+  gap: .5rem;
+}
+.template-name    { font-size: 1rem; font-weight: 700; color: var(--text); }
+.template-meta    { display: flex; align-items: center; gap: .5rem; margin-top: .3rem; flex-wrap: wrap; }
+.template-cat     { font-size: .8rem; color: var(--text-muted); background: var(--bg); border-radius: 4px; padding: .1rem .4rem; }
+.template-actions { display: flex; align-items: center; gap: .4rem; flex-shrink: 0; }
+.template-desc    { font-size: .875rem; color: var(--text-muted); margin-bottom: .85rem; line-height: 1.4; }
+
+.btn-use-template {
+  background: #eff6ff;
+  color: var(--primary);
+  border: 1px solid #bfdbfe;
+  border-radius: 8px;
+  padding: .45rem 1rem;
+  font-size: .875rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background .15s;
+}
+.btn-use-template:hover { background: #dbeafe; }
+
 /* ── Inline edit form ─────────────────────────────────────── */
 .edit-form { display: flex; flex-direction: column; gap: .1rem; }
 .edit-form .form-group { margin-bottom: .6rem; }

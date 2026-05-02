@@ -5,18 +5,36 @@ import { normalizeProperty, dedupeProperties } from '../propertyUtils'
 
 const today = () => new Date().toISOString().split('T')[0]
 
-export default function LogHoursForm({ currentUser, year, onSaved }) {
-  const [form, setForm] = useState({
-    user_name:   currentUser,
-    date:        today(),
-    category:    '',
-    hours:       '',
-    property:    '',
-    description: '',
-  })
+const emptyForm = (user) => ({
+  user_name:   user,
+  date:        today(),
+  category:    '',
+  hours:       '',
+  property:    '',
+  description: '',
+})
+
+export default function LogHoursForm({ currentUser, year, prefill, onSaved }) {
+  const [form, setForm]           = useState(() => emptyForm(currentUser))
   const [saving, setSaving]       = useState(false)
   const [error, setError]         = useState('')
   const [properties, setProperties] = useState([])
+
+  // Pre-fill form when coming from "Log Again" or "Use Template"
+  useEffect(() => {
+    if (prefill) {
+      setForm({
+        user_name:   prefill.user_name || currentUser,
+        date:        today(),
+        category:    prefill.category    || '',
+        hours:       '',
+        property:    prefill.property    || '',
+        description: prefill.description || '',
+      })
+    } else {
+      setForm(emptyForm(currentUser))
+    }
+  }, [prefill, currentUser])
 
   useEffect(() => {
     supabase
@@ -63,7 +81,10 @@ export default function LogHoursForm({ currentUser, year, onSaved }) {
   return (
     <div className="log-form-wrap">
       <div className="log-form-card">
-        <h2>Log Hours</h2>
+        <h2>{prefill ? 'Log Hours (Pre-filled)' : 'Log Hours'}</h2>
+        {prefill && (
+          <p className="prefill-notice">Fields pre-filled — just set the date and hours.</p>
+        )}
         <form onSubmit={handleSubmit} className="log-form">
 
           <div className="form-row-2">
