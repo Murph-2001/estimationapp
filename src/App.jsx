@@ -84,6 +84,12 @@ export default function App() {
     saveTemplates(updated)
   }
 
+  const handleUpdateTemplate = (id, changes) => {
+    const updated = templates.map(t => t.id === id ? { ...t, ...changes } : t)
+    setTemplates(updated)
+    saveTemplates(updated)
+  }
+
   if (!user) return <Login onLogin={handleLogin} />
 
   return (
@@ -137,6 +143,7 @@ export default function App() {
             year={year}
             onSave={handleSaveTemplate}
             onDelete={handleDeleteTemplate}
+            onUpdate={handleUpdateTemplate}
             onSaved={() => { fetchEntries(); setTab('dashboard') }}
           />
         )}
