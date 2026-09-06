@@ -1,21 +1,27 @@
 import { useState } from 'react'
-import { USERS } from '../constants'
+import { supabase } from '../supabaseClient'
 
 export default function Login({ onLogin }) {
-  const [name, setName] = useState('')
+  const [name, setName]         = useState('')
   const [password, setPassword] = useState('')
-  const [error, setError] = useState('')
+  const [error, setError]       = useState('')
+  const [loading, setLoading]   = useState(false)
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
     setError('')
-    const match = USERS.find(
-      u => u.name.toLowerCase() === name.toLowerCase() && u.password === password
-    )
-    if (match) {
-      onLogin(match.name)
-    } else {
+    setLoading(true)
+    const { data, error: dbError } = await supabase
+      .from('user_settings')
+      .select('name')
+      .eq('name', name.trim())
+      .eq('password', password)
+      .single()
+    setLoading(false)
+    if (dbError || !data) {
       setError('Invalid username or password.')
+    } else {
+      onLogin(data.name)
     }
   }
 
@@ -33,7 +39,7 @@ export default function Login({ onLogin }) {
               type="text"
               value={name}
               onChange={e => setName(e.target.value)}
-              placeholder="patrick or samantha"
+              placeholder="Your username"
               autoComplete="username"
               required
             />
@@ -51,7 +57,9 @@ export default function Login({ onLogin }) {
             />
           </div>
           {error && <p className="login-error">{error}</p>}
-          <button type="submit" className="btn-primary btn-full">Sign In</button>
+          <button type="submit" className="btn-primary btn-full" disabled={loading}>
+            {loading ? 'Signing in…' : 'Sign In'}
+          </button>
         </form>
       </div>
     </div>

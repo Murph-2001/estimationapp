@@ -5,6 +5,7 @@ import Dashboard from './components/Dashboard'
 import LogHoursForm from './components/LogHoursForm'
 import History from './components/History'
 import Templates from './components/Templates'
+import AccountSettings from './components/AccountSettings'
 
 const TEMPLATES_KEY = 'reps_templates'
 
@@ -21,8 +22,9 @@ export default function App() {
   const [entries, setEntries] = useState([])
   const [loading, setLoading] = useState(false)
   const [year, setYear]       = useState(new Date().getFullYear())
-  const [prefill, setPrefill] = useState(null)
-  const [templates, setTemplates] = useState(loadTemplates)
+  const [prefill, setPrefill]       = useState(null)
+  const [templates, setTemplates]   = useState(loadTemplates)
+  const [showSettings, setShowSettings] = useState(false)
 
   const fetchEntries = useCallback(async () => {
     setLoading(true)
@@ -56,6 +58,14 @@ export default function App() {
   }
 
   const handleLogout = () => {
+    localStorage.removeItem('reps_user')
+    setUser(null)
+    setEntries([])
+    setTab('dashboard')
+  }
+
+  const handleSettingsSaved = (newName) => {
+    setShowSettings(false)
     localStorage.removeItem('reps_user')
     setUser(null)
     setEntries([])
@@ -111,6 +121,7 @@ export default function App() {
               ))}
             </select>
             <span className="logged-in-as">👤 {user}</span>
+            <button className="btn-settings" onClick={() => setShowSettings(true)} title="Account Settings">⚙️</button>
             <button className="btn-logout" onClick={handleLogout}>Logout</button>
           </div>
         </div>
@@ -121,6 +132,14 @@ export default function App() {
           <button className={tab === 'history'   ? 'tab active' : 'tab'} onClick={() => setTab('history')}>History</button>
         </nav>
       </header>
+
+      {showSettings && (
+        <AccountSettings
+          currentUser={user}
+          onSaved={handleSettingsSaved}
+          onClose={() => setShowSettings(false)}
+        />
+      )}
 
       <main className="app-main">
         {loading && <div className="loading-bar" />}
