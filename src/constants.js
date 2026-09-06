@@ -11,10 +11,7 @@ export const CATEGORIES = [
 ]
 
 export const USERS = [
-  { name: 'Patrick',  password: 'coastal2025' },
-  { name: 'Samantha', password: 'mermaid2025' },
-  { name: 'Suzanne',  password: 'Weiner25'    },
-  { name: 'Jennifer', password: 'Maxi25'      },
+  { name: 'CoastalFriend1', password: 'RealEstate101!' },
 ]
 
 export const REPS_THRESHOLD   = 750
