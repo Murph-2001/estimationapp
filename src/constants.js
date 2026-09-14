@@ -15,6 +15,7 @@ export const USERS = [
   { name: 'Samantha', password: 'mermaid2025' },
   { name: 'Suzanne',  password: 'Weiner25'    },
   { name: 'Jennifer', password: 'Maxi25'      },
+  { name: 'TCM',      password: 'Coastal101!' },
 ]
 
 export const REPS_THRESHOLD   = 750

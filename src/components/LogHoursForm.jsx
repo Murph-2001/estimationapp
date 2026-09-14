@@ -16,9 +16,10 @@ const emptyForm = (user) => ({
 
 export default function LogHoursForm({ currentUser, year, prefill, onSaved }) {
   const [form, setForm]           = useState(() => emptyForm(currentUser))
-  const [saving, setSaving]       = useState(false)
-  const [error, setError]         = useState('')
-  const [properties, setProperties] = useState([])
+  const [saving, setSaving]             = useState(false)
+  const [error, setError]               = useState('')
+  const [properties, setProperties]     = useState([])
+  const [customProperty, setCustomProperty] = useState('')
 
   // Pre-fill form when coming from "Log Again" or "Use Template"
   useEffect(() => {
@@ -63,7 +64,9 @@ export default function LogHoursForm({ currentUser, year, prefill, onSaved }) {
       date:        form.date,
       category:    form.category,
       hours:       hrs,
-      property:    form.property ? normalizeProperty(form.property) : null,
+      property:    form.property === '__custom__'
+        ? (customProperty.trim() ? normalizeProperty(customProperty.trim()) : null)
+        : (form.property ? normalizeProperty(form.property) : null),
       description: form.description,
       year,
     }])
@@ -143,17 +146,24 @@ export default function LogHoursForm({ currentUser, year, prefill, onSaved }) {
 
           <div className="form-group">
             <label>Property <span className="field-optional">(optional)</span></label>
-            <input
-              type="text"
-              list="property-list"
+            <select
               value={form.property}
-              onChange={e => set('property', e.target.value)}
-              placeholder="e.g. 123 Main St"
-              autoComplete="off"
-            />
-            <datalist id="property-list">
-              {properties.map(p => <option key={p} value={p} />)}
-            </datalist>
+              onChange={e => { set('property', e.target.value); setCustomProperty('') }}
+            >
+              <option value="">— No specific property —</option>
+              {properties.map(p => <option key={p} value={p}>{p}</option>)}
+              <option value="__custom__">+ Add new address…</option>
+            </select>
+            {form.property === '__custom__' && (
+              <input
+                type="text"
+                value={customProperty}
+                onChange={e => setCustomProperty(e.target.value)}
+                placeholder="Type new address"
+                autoFocus
+                style={{ marginTop: '.5rem' }}
+              />
+            )}
           </div>
 
           <div className="form-group">
