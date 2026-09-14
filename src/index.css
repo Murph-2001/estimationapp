@@ -823,3 +823,16 @@ body {
   .header-inner { flex-direction: column; align-items: flex-start; }
   .stats-row    { grid-template-columns: repeat(3, 1fr); }
 }
+
+.btn-export {
+  padding: .45rem .9rem;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: var(--card-bg);
+  color: var(--text);
+  font-size: .85rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background .15s;
+}
+.btn-export:hover { background: var(--border); }

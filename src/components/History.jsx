@@ -109,6 +109,29 @@ export default function History({ entries, onRefresh, currentUser, onLogAgain, y
 
   const printDate = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })
 
+  const exportCSV = () => {
+    const csvEscape = (val) => `"${String(val ?? '').replace(/"/g, '""')}"`
+    const headers = ['Date', 'Person', 'Category', 'Hours', 'Property', 'Description']
+    const rows = [...filtered]
+      .sort((a, b) => a.date < b.date ? -1 : 1)
+      .map(e => [
+        formatDate(e.date),
+        e.user_name,
+        CAT_LABEL[e.category] || e.category,
+        Number(e.hours).toFixed(1),
+        e.property || '',
+        e.description,
+      ].map(csvEscape).join(','))
+    const csv = [headers.join(','), ...rows].join('\n')
+    const blob = new Blob([csv], { type: 'text/csv' })
+    const url  = URL.createObjectURL(blob)
+    const a    = document.createElement('a')
+    a.href     = url
+    a.download = `REPS-Hours-${year}${filterUser !== 'All' ? `-${filterUser}` : ''}.csv`
+    a.click()
+    URL.revokeObjectURL(url)
+  }
+
   return (
     <div className="history">
 
@@ -200,6 +223,7 @@ export default function History({ entries, onRefresh, currentUser, onLogAgain, y
                 ))}
               </select>
             </div>
+            <button className="btn-export" onClick={exportCSV}>Export to Excel</button>
             <button className="btn-print" onClick={() => window.print()}>Print / Save PDF</button>
           </div>
         </div>
